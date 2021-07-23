@@ -17,13 +17,13 @@ router.post('/register', async (req, res, next) => {
     }
 
     if(!username || !password) {
-      return res.status(409).json({
+      return res.status(400).json({
 				message: 'username and password required',
 			})
     }
 
 		const newUser = await Users.add({
-			username,
+			username: username,
       password: await bcrypt.hash(password, 14),
 		})
 
@@ -55,7 +55,7 @@ router.post('/login', async (req, res, next) => {
             id: user.id,
         }, process.env.JWT_SECRET)
 		res.json({
-            message: `Welcome, ${user.username}!`,
+            message: `Welcome, ${username}!`,
             token: token
 		})
 	} catch(err) {
